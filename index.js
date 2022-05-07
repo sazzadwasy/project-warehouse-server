@@ -38,6 +38,11 @@ async function run() {
             })
             res.send(result)
         })
+        app.post('/inventory', async (req, res) => {
+            const newItem = req.body
+            const result = await bikeCollection.insertOne(newItem)
+            res.send(result)
+        })
     }
     finally {
 
