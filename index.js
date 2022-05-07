@@ -1,7 +1,7 @@
 const express = require("express");
 const cors = require('cors')
 
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 require('dotenv').config()
 const app = express()
 const port = process.env.PORT || 5000
@@ -17,11 +17,26 @@ async function run() {
         await client.connect();
         const bikeCollection = client.db('inventory').collection('bike')
 
-        app.get('/bike', async (req, res) => {
+        app.get('/inventory', async (req, res) => {
             const query = {}
             const cursor = bikeCollection.find(query)
             const bikes = await cursor.toArray()
             res.send(bikes)
+        })
+        app.get('/inventory/:id', async (req, res) => {
+            const id = req.params.id
+            const query = { _id: ObjectId(id) }
+            const result = await bikeCollection.findOne(query)
+            res.send(result)
+        })
+        app.put('/inventory/update/:id', async (req, res) => {
+            const id = req.params.id
+            const query = { _id: ObjectId(id) }
+            console.log(id, req.body.quantity)
+            const result = await bikeCollection.updateOne(query, {
+                $set: { quantity: parseInt(req.body.quantity) }
+            })
+            res.send(result)
         })
     }
     finally {
