@@ -41,9 +41,8 @@ async function run() {
         })
         //my items
         app.get('/myitems', async (req, res) => {
-            const email = req.query
-            console.log(email)
-            const query = {}
+            const email = req.query.email
+            const query = { email: email }
             const cursor = bikeCollection.find(query)
             const items = await cursor.toArray()
             res.send(items)
