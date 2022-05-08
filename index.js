@@ -30,14 +30,13 @@ async function run() {
             const result = await bikeCollection.findOne(query)
             res.send(result)
         })
-        app.put('/inventory/update/:id', async (req, res) => {
-            const id = req.params.id
-            const query = { _id: ObjectId(id) }
-            console.log(id, req.body.quantity)
-            const result = await bikeCollection.updateOne(query, {
-                $set: { quantity: parseInt(req.body.quantity) }
-            })
-            res.send(result)
+
+        //my items
+        app.get('/myitems', async (req, res) => {
+            const query = {}
+            const cursor = bikeCollection.find(query)
+            const items = await cursor.toArray()
+            res.send(items)
         })
         app.post('/inventory', async (req, res) => {
             const newItem = req.body
