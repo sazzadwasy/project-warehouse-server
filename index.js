@@ -33,7 +33,6 @@ async function run() {
         app.put('/inventory/update/:id', async (req, res) => {
             const id = req.params.id
             const query = { _id: ObjectId(id) }
-            console.log(id, req.body.quantity)
             const result = await bikeCollection.updateOne(query, {
                 $set: { quantity: parseInt(req.body.quantity) }
             })
